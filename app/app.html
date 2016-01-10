@@ -1,15 +1,32 @@
+<!-- meteor-ios-app-example-app/app.html -->
 <head>
-  <title>app</title>
+  <title>Todo List</title>
 </head>
 
 <body>
-  <h1>MeteorでiOSアプリ開発</h1>
-  <h2>Hello, World!</h2>
+  <div class="container">
+    <header>
+      <h1>Todo List</h1>
 
-  {{> hello}}
+      <form class="new-task">
+        <input type="text" name="text" placeholder="Type to add new tasks" />
+      </form>
+    </header>
+
+    <ul>
+      {{#each tasks}}
+        {{> task}}
+      {{/each}}
+    </ul>
+  </div>
 </body>
 
-<template name="hello">
-  <button>ここをタップ！</button>
-  <p>タップ回数：{{counter}}</p>
+<template name="task">
+  <li class="{{#if checked}}checked{{/if}}">
+    <button class="delete">&times;</button>
+
+    <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
+
+    <span class="text">{{text}}</span>
+  </li>
 </template>
