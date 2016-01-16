@@ -1,4 +1,4 @@
-// meteor-ios-app-example-app/app.js
+// meteor-ios-app-example/app/app.js
 Tasks = new Mongo.Collection("tasks");
 
 if (Meteor.isClient) {
@@ -36,8 +36,23 @@ if (Meteor.isClient) {
       });
     },
     "click .delete": function () {
-      if (confirm("Are you sure?")) {
-        Tasks.remove(this._id);
+      const message = "Are you sure?";
+      const title   = `Delete Task: ${this.text}`;
+      const buttonLabels = ["Cancel", "OK"];
+      const taskId = this._id;
+      const onConfirm = function(buttonIndex) {
+        if (buttonIndex === 2) { // OK
+          Tasks.remove(taskId);
+        }
+      };
+
+      if (Meteor.isCordova) {
+        // Use background thread for iOS
+        Meteor.setTimeout(function() {
+          navigator.notification.confirm(message, onConfirm, title, buttonLabels);
+        }, 1);
+      } else if (confirm(message)) {
+        Tasks.remove(taskId);
       }
     }
   });
